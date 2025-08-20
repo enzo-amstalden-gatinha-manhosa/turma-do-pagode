@@ -1,0 +1,36 @@
+📂 projeto-adocao
+├── 📂 src
+│ ├── 📂 config
+│ │ └── database.js
+│ ├── 📂 models
+│ │ ├── index.js
+│ │ ├── Usuario.js
+│ │ ├── Animal.js
+│ │ ├── Adocao.js
+│ │ ├── Doacao.js
+│ │ └── Admin.js
+│ ├── 📂 controllers
+│ │ ├── UsuarioController.js
+│ │ ├── AnimalController.js
+│ │ ├── AdocaoController.js
+│ │ ├── DoacaoController.js
+│ │ └── AdminController.js
+│ ├── 📂 routes
+│ │ ├── usuarioRoutes.js
+│ │ ├── animalRoutes.js
+│ │ ├── adocaoRoutes.js
+│ │ ├── doacaoRoutes.js
+│ │ └── adminRoutes.js
+│ ├── 📂 middlewares
+│ │ ├── authMiddleware.js
+│ │ └── adminMiddleware.js
+│ ├── 📂 seeders
+│ │ └── seedAdmins.js
+│ ├── 📂 utils
+│ │ ├── encrypt.js
+│ │ └── qrcode.js
+│ └── app.js
+├── .env
+├── package.json
+├── package-lock.json
+└── README.md
