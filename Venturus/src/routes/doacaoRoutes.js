@@ -38,3 +38,5 @@ doacao.post('/doacoes', (req, res) => {
         return res.status(500).json({ erro: "Erro ao processar a doação" });
     }
 });
+
+module.exports = doacao;

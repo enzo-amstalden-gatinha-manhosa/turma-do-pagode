@@ -48,3 +48,5 @@ adocao.post('/adocoes', (req, res) => {
         
     }
 });
+
+module.exports = adocao;
