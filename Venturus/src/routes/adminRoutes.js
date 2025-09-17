@@ -38,4 +38,37 @@ admin.get('/admin/animais', async (req, res) => {
     }
   });
   
+  admin.patch('/admin/animais/:id', async (req, res)=>{
+    try{
+      const {id} = req.params;
+      const dadosAtualizados= req.body;
+
+      if (!dadosAtualizados || Object.keys(dadosAtualizados).length ===0){
+        return res.status(400).json({
+          erro: 'Nenhum campo foi fornecido para atualização'
+        });
+      }
+      const animal = await Animal.findByPk(id); // Não é PK, e sim Pk
+
+      if(!animal){
+        return res.status(404).json({erro: 'Animal não encontrado'});
+      }
+
+      await animal.update(dadosAtualizados);
+
+      return res.status(200).json({
+        id: animal.id,
+        nome: animal.nome,
+        castrado: animal.castrado,
+        vacinado: animal.vacinado,
+        adotado: animal.adotado,
+        descricao: animal.descricao,
+        updated_at: animal.updatedAt.toISOString()
+      });
+    }catch(erro){
+      console.error(erro);
+      return res.status(500).json({erro: 'Erro ao atualizar o animal'});
+    };
+  })
+  
   module.exports = admin;
