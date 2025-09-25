@@ -1,4 +1,4 @@
-const { Usuario } = require('../models'); 
+const { Usuario } = require('../models');
 
 async function authMiddleware(req, res, next) {
   try {
