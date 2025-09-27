@@ -1,10 +1,11 @@
 {
     "name": "turma-do-pagode",
     "version": "1.0.0",
-    "main": "index.js",
+    "main": "app.js",
     "scripts": {
         "start": "node nodemom",
         "test": "echo \"Error: no test specified\" && exit 1"
+        
     },
     "keywords": [],
     "author": "",

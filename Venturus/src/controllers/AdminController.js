@@ -55,7 +55,7 @@ admin.get('/admin/animais', async (req, res) => {
         return res.status(404).json({erro: 'Animal não encontrado'});
       }
 
-      await animal.update(dadosAtualizados);
+      await animal.update("Dados atualizados com sucesso", dadosAtualizados);
 
       return res.status(200).json({
         id: animal.id,
@@ -71,5 +71,18 @@ admin.get('/admin/animais', async (req, res) => {
       return res.status(500).json({erro: 'Erro ao atualizar o animal'});
     };
   })
-  
+  admin.delete('/admin/animais/:id', async (req, res)=>{
+    try{
+      const {id} = req.params;
+      const animal = await Animal.findByPk(id);
+      if(!animal){
+        return res.status(404).json({erro: 'Animal não encontrado'});
+      }
+      await animal.destroy();
+      return res.status(204).json({msg: 'Animal deletado com sucesso'});
+    }catch(erro){
+      console.error(erro);
+      return res.status(500).json({erro: 'Erro ao deletar o animal'});
+    }
+  });
   module.exports = admin;
