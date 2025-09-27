@@ -27,7 +27,7 @@ admin.get('/admin/animais', async (req, res) => {
             as: 'pedidosAdocao'
           }
         ],
-        order: [['created_at', 'DESC']]
+        order: [['createdAT', 'DESC']]
       });
   
       res.status(200).json({
