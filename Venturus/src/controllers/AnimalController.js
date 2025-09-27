@@ -1,5 +1,8 @@
 const express = require('express');
-const Animal = require('../models/Animal');
+const sequelize = require('../config/database'); // importa a instância
+const AnimalModel = require('../models/Animal').default; // importa a função do model
+const Animal = AnimalModel(sequelize); // instancia o model de verdade
+
 
 
 module.exports = {
@@ -12,7 +15,7 @@ module.exports = {
       if (castrado !== undefined) where.castrado = castrado === 'true';
       if (vacinado !== undefined) where.vacinado = vacinado === 'true';
 
-      const animais = await Animal.findAll({ where, order: [['created_at', 'ASC']] });
+      const animais = await Animal.findAll({ where, order: [['createdAT', 'ASC']] });
       res.status(200).json({ data: animais, total: animais.length });
     } catch (erro) {
         console.error(erro);
@@ -37,6 +40,12 @@ module.exports = {
       if (!nome || !especie || !porte || castrado === undefined || vacinado === undefined || !descricao || !foto) {
         return res.status(400).json({ erro: "Todos os campos obrigatórios devem ser preenchidos corretamente." });
       }
+      if (typeof nome !== 'string' || typeof especie !== 'string' || typeof porte !== 'string' || typeof descricao !== 'string' || typeof foto !== 'string') {
+        return res.status(400).json({ erro: "Campos nome, especie, porte, descricao e foto devem ser strings." });
+      }
+      if (typeof castrado !== 'boolean' || typeof vacinado !== 'boolean') {
+        return res.status(400).json({ erro: "Campos castrado e vacinado devem ser true ou false." });
+      }
 
       const novoAnimal = await Animal.create({
         nome,
@@ -50,7 +59,8 @@ module.exports = {
 
       res.status(201).json(novoAnimal);
     } catch (erro) {
-      res.status(500).json({ erro: "Erro interno ao cadastrar o animal." });
+      console.error('Erro ao cadastrar o animal', erro);
+      res.status(500).json({ erro: "Erro interno ao cadastrar o animal.", detalhes: erro.message });
     }
   }
 };

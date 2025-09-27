@@ -5,7 +5,7 @@ function adminMiddleware(req, res, next) {
   }
 
   if (!req.user.administrador) {
-    return res.status(403).json({ erro: 'Acesso negado: apenas administradores' });
+    return res.status(403).json({ erro: 'Acesso não autorizado' });
   }
 
   next();
