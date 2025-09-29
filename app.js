@@ -1,16 +1,21 @@
+'use strict';
+
 const express = require('express');
 const app = express();
 const authMiddleware = require('./src/middlewares/authMiddleware');
 const adminMiddleware = require('./src/middlewares/adminMiddleware');
 const animalRoutes = require('./src/routes/animalRoutes');
-const doacoesRoutes = require('./src/routes/doacoesRoutes'); 
+const doacoesRoutes = require('./src/routes/doacoesRoutes'); // havia nos dois blocos
+const usuarioRoutes = require('./src/routes/usuarioRoutes');
+const adocaoRoutes = require('./src/routes/adocaoRoutes');
+const adminRoutes = require('./src/routes/adminRoutes');
 const sequelize = require('./src/config/database');
 
 // Testar conexão com o banco de dados
 sequelize.authenticate()
   .then(() => {
-      console.log('Conexão com o banco de dados estabelecida com sucesso.');
-      return sequelize.sync();
+    console.log('Conexão com o banco de dados estabelecida com sucesso.');
+    return sequelize.sync();
   })
   .then(() => console.log('Banco de dados sincronizado.'))
   .catch(err => console.error('Não foi possível conectar ao banco de dados:', err));
@@ -35,7 +40,12 @@ app.get('/admin/animais', authMiddleware, adminMiddleware, (req, res) => {
 
 // Rotas principais
 app.use('/animais', animalRoutes);
+app.use('/adocao', adocaoRoutes);
+app.use('/usuario', usuarioRoutes);
+app.use('/doacoes', doacoesRoutes);
 app.use(doacoesRoutes); // rota de doações integrada
+app.use(adminRoutes);   // se tiver rotas específicas de admin
+app.use('/');           // aqui é a rota de questionário (ainda precisa implementar)
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
