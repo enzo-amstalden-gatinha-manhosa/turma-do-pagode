@@ -1,34 +1,39 @@
 import PedidoAdocao from '../models/PedidoAdocao.js';
 import Tutor from '../models/Tutor.js';
 import Animal from '../models/Animal.js';
+import Questionario from '../models/Questionario.js';
+import { Op } from 'sequelize';
 
 export const postAdocao = async (req, res) => {
   const { tutorId, animalId } = req.body;
 
-  // Validação básica
+  // Validação básica - 400 Bad Request
   if (!tutorId || !animalId) {
-    return res.status(400).json({ erro: 'Campos obrigatórios não preenchidos' });
+    return res.status(400).json({ erro: 'O tutor ainda não respondeu o questionário obrigatório' });
   }
 
   try {
-    // Verifica se o tutor existe
+    // Verifica se o tutor ou animal existe - 404 Not Found
     const tutor = await Tutor.findByPk(tutorId);
-    if (!tutor) {
-      return res.status(404).json({ erro: 'Tutor não encontrado' });
-    }
-
-    // Verifica se o animal existe
     const animal = await Animal.findByPk(animalId);
-    if (!animal) {
-      return res.status(404).json({ erro: 'Animal não encontrado' });
+    if (!tutor || !animal) {
+      return res.status(404).json({ erro: 'Tutor ou animal não encontrado' });
     }
 
-    // Verifica se já existe um pedido para esse animal
-    const pedidoExistente = await PedidoAdocao.findOne({ where: { animalId } });
+    // Verifica se existe um pedido ativo para o tutor e animal - 409 Conflict
+    const pedidoExistente = await PedidoAdocao.findOne({
+      where: {
+        tutorId,
+        animalId,
+        status: {
+          [Op.notIn]: ['finalizado', 'cancelado']}
+      }
+    });
+    
     if (pedidoExistente) {
-      return res.status(400).json({ erro: 'Animal já está em processo de adoção' });
-    }
-
+      return res.status(409).json({ erro: 'Este tutor já tem um pedido de adoção para este animal' });
+    } 
+    
     // Cria novo pedido
     const novoPedido = await PedidoAdocao.create({
       tutorId,
@@ -39,6 +44,6 @@ export const postAdocao = async (req, res) => {
 
     return res.status(201).json(novoPedido);
   } catch (erro) {
-    return res.status(500).json({ erro: 'Erro ao processar o pedido de adoção' });
+    return res.status(500).json({ erro: 'Erro ao registar o pedido de adoção' });
   }
 };
