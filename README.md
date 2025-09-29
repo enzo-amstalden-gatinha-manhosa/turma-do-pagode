@@ -19,7 +19,7 @@ API REST desenvolvida para gerenciar o processo de adoção de animais, incluind
 - Node.js  
 - Express.js  
 - Sequelize  
-- SQLite (ou outro banco relacional)  
+- SQLite
 - EncryptJS (criptografia de senhas)  
 
 ---
@@ -93,14 +93,22 @@ API REST desenvolvida para gerenciar o processo de adoção de animais, incluind
 
 ## 📂 Estrutura do Projeto
 ```
-src/
- ├─ controllers/
- ├─ models/
- ├─ routes/
- ├─ middlewares/
- ├─ config/
- ├─ app.js
- └─ database.sqlite
+turma-do-pagode/
+├── src/
+│   ├── config/
+│   ├── controllers/
+│   ├── middlewares/
+│   ├── models/
+│   ├── routes/
+│   ├── seeders/
+│   └── utils/
+├── .gitignore
+├── app.js
+├── database.sqlite
+├── package-lock.json
+├── package.json
+└── README.md
+
 ```
 
 ---
@@ -133,5 +141,4 @@ src/
 
 ---
 
-@Copyright 2025, turma-do-pagode
-
+Copyright @turma-do-pagode
