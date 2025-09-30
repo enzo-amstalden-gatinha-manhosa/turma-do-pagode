@@ -1,15 +1,14 @@
-import PedidoAdocao from '../models/PedidoAdocao.js';
-import Tutor from '../models/Tutor.js';
-import Animal from '../models/Animal.js';
-import Questionario from '../models/Questionario.js';
-import { Op } from 'sequelize';
+const PedidoAdocao = require('../models/PedidoAdocao');
+const Tutor = require('../models/Usuario');
+const Animal = require('../models/Animal');
+const { Op } = require('sequelize');
 
-export const postAdocao = async (req, res) => {
+const postAdocao = async (req, res) => {
   const { tutorId, animalId } = req.body;
 
-  // Validação básica - 400 Bad Request
+  // Validação básica - 404 Not Found
   if (!tutorId || !animalId) {
-    return res.status(400).json({ erro: 'O tutor ainda não respondeu o questionário obrigatório' });
+    return res.status(404).json({ erro: 'Tutor/Animal não encontrado.' });
   }
 
   try {
@@ -26,7 +25,8 @@ export const postAdocao = async (req, res) => {
         tutorId,
         animalId,
         status: {
-          [Op.notIn]: ['finalizado', 'cancelado']}
+          [Op.notIn]: ['finalizado', 'cancelado']
+        }
       }
     });
     
@@ -47,3 +47,6 @@ export const postAdocao = async (req, res) => {
     return res.status(500).json({ erro: 'Erro ao registar o pedido de adoção' });
   }
 };
+
+// Exportando no formato CommonJS
+module.exports = { postAdocao };

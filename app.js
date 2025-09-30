@@ -43,9 +43,6 @@ app.use('/animais', animalRoutes);
 app.use('/adocao', adocaoRoutes);
 app.use('/usuario', usuarioRoutes);
 app.use('/doacoes', doacoesRoutes);
-app.use(doacoesRoutes); // rota de doações integrada
-app.use(adminRoutes);   // se tiver rotas específicas de admin
-app.use('/');           // aqui é a rota de questionário (ainda precisa implementar)
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
