@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 import AnimalModel from './Animal.js';
-import TutorModel from './Tutor.js';
+import TutorModel from './Usuario.js';
 import QuestionarioModel from './Questionario.js';
 import PedidoAdocaoModel from './PedidoAdocao.js';
 import DoacaoModel from './Doacao.js';
@@ -16,12 +16,17 @@ export const Questionario = QuestionarioModel(sequelize);
 export const PedidoAdocao = PedidoAdocaoModel(sequelize);
 export const Doacao = DoacaoModel(sequelize);
 
-// Associações
-// Explicação das associações:
-// - Um Tutor tem um Questionario.
-// - Um Tutor pode ter vários Pedidos de Adoção.
-// - Um Animal pode ter vários Pedidos de Adoção.
-// A tabela PedidosAdocao serve como uma tabela de junção entre Tutores e Animais.
+Tutor.hasOne(Questionario, { foreignKey: 'id_tutor' });
+Questionario.belongsTo(Tutor, { foreignKey: 'id_tutor' });
+
+Tutor.hasMany(PedidoAdocao, { foreignKey: 'id_tutor' });
+PedidoAdocao.belongsTo(Tutor, { foreignKey: 'id_tutor' });
+
+Animal.hasMany(PedidoAdocao, { foreignKey: 'id_animal' });
+PedidoAdocao.belongsTo(Animal, { foreignKey: 'id_animal' });
+
+PedidoAdocao.hasMany(Doacao, { foreignKey: 'id_pedido_adocao' });
+Doacao.belongsTo(PedidoAdocao, { foreignKey: 'id_pedido_adocao' });
 
 await sequelize.sync();
 
