@@ -6,9 +6,9 @@ const { Op } = require('sequelize');
 const postAdocao = async (req, res) => {
   const { tutorId, animalId } = req.body;
 
-  // Validação básica - 404 Not Found
-  if (!tutorId || !animalId) {
-    return res.status(404).json({ erro: 'Tutor/Animal não encontrado.' });
+  // Validação básica - 400 Bad Request
+  if (!tutorId || !animalId || typeof tutorId !== 'number' || typeof animalId !== 'number') {
+    return res.status(400).json({ erro: 'O tutor não respondeu o questionário obrigatório' });
   }
 
   try {
