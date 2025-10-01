@@ -12,7 +12,7 @@ const adminRoutes = require('./src/routes/adminRoutes');
 const sequelize = require('./src/config/database');
 
 // Testar conexão com o banco de dados
-sequelize.authenticate()
+sequelize.sync()
   .then(() => {
     console.log('Conexão com o banco de dados estabelecida com sucesso.');
     return sequelize.sync();
