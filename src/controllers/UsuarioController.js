@@ -64,9 +64,10 @@ module.exports = {
         try {
             const id = req.params.id;
     
-            const usuario = await Usuario.findByPk(id)
-            const questionario = await Questionario.findByPk(id);
-            if (!usuario || !questionario) {
+            const usuario = await Usuario.findByPk(id, {
+                include: { model: Questionario, as: 'questionario' }
+            });
+            if (!usuario) {
                 return res.status(404).json({ error: 'Tutor não encontrado' });
             }
     
@@ -85,7 +86,7 @@ module.exports = {
                     houveAtualizacao = true;
                 }
             });
-    
+            
             camposPermitidosQuestionario.forEach(campo => {
                 if (req.body[campo] !== undefined) {
                     questionario[campo] = req.body[campo];
@@ -96,9 +97,34 @@ module.exports = {
             if (!houveAtualizacao) {
                 return res.status(400).json({ error: 'Pelo menos um campo deve ser enviado para atualização.' });
             }
-    
+
+            let questionario = usuario.questionario;
+            if (questionario) {
+                camposPermitidosQuestionario.forEach(campo => {
+                if (req.body[campo] !== undefined) {
+                    questionario[campo] = req.body[campo];
+                    houveAtualizacao = true;
+                }
+                });
+                await questionario.save();
+            } else {
+                const dadosQuestionario = {};
+              
+                camposPermitidosQuestionario.forEach(campo => {
+                  if (req.body[campo] !== undefined) {
+                    dadosQuestionario[campo] = req.body[campo];
+                    houveAtualizacao = true;
+                  }
+                });
+              
+                if (houveAtualizacao) {
+                  questionario = await Questionario.create({
+                    ...dadosQuestionario,
+                    id_tutor: usuario.id 
+                  });
+                }
+              }
             await usuario.save();
-            await questionario.save();
             res.json({ message: "Dados atualizados com sucesso.", usuario, questionario });
         } catch (error) {
             console.error(error);
