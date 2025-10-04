@@ -10,7 +10,8 @@ export default (sequelize) => {
         },
         nome_completo: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            field: 'name'
         },
         email: {
             type: DataTypes.STRING,
@@ -19,7 +20,8 @@ export default (sequelize) => {
         },
         senha: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            field: 'password'
         },
         cidade: {
             type: DataTypes.STRING,

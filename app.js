@@ -9,6 +9,7 @@ const doacoesRoutes = require('./src/routes/doacoesRoutes'); // havia nos dois b
 const usuarioRoutes = require('./src/routes/usuarioRoutes');
 const adocaoRoutes = require('./src/routes/adocaoRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
+const questionarioRoutes = require('./src/routes/questionarioRoutes');
 const sequelize = require('./src/config/database');
 
 // Testar conexão com o banco de dados
@@ -43,6 +44,8 @@ app.use('/animais', animalRoutes);
 app.use('/adocao', adocaoRoutes);
 app.use('/usuario', usuarioRoutes);
 app.use('/doacoes', doacoesRoutes);
+app.use('/admin', authMiddleware, adminMiddleware, adminRoutes);
+app.use('/questionario', questionarioRoutes); // Nova rota para questionários
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;

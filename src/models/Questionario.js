@@ -186,10 +186,14 @@ export default (sequelize) => {
         data_disponivel_para_buscar_animal: {
             type: DataTypes.STRING,
             allowNull: false
-        }
+        },
         tutorId: {
             type: DataTypes.UUID,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: 'Usuario',
+                key: 'id'
+            }
         }
     }, {
         tableName: 'questionarios',
