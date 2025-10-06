@@ -12,6 +12,10 @@ const adminRoutes = require('./src/routes/adminRoutes');
 const questionarioRoutes = require('./src/routes/questionarioRoutes');
 const sequelize = require('./src/config/database');
 const loginRoutes = require('./src/routes/loginRoutes')
+const path = require('path');
+
+// Servir arquivos estáticos (imagens)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Testar conexão com o banco de dados
 sequelize.sync()

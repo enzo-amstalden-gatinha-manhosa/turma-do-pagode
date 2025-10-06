@@ -5,6 +5,12 @@ const Animal = require('../models/Animal');
 const PedidoAdocao = require('../models/PedidoAdocao');
 const adminMiddleware = require('../middlewares/adminMiddleware');
 
+Animal.hasMany(PedidoAdocao, { as: 'pedidosAdocao', foreignKey: 'animalId' });
+PedidoAdocao.belongsTo(Animal, { foreignKey: 'animalId' });
+
+
+
+
 admin.use(express.json());
 admin.use('/admin', adminMiddleware);
 
@@ -27,7 +33,7 @@ admin.get('/animais', async (req, res) => {
             as: 'pedidosAdocao'
           }
         ],
-        order: [['created_at', 'DESC']]
+        order: [['createdAT', 'DESC']]
       });
   
       res.status(200).json({
@@ -35,6 +41,7 @@ admin.get('/animais', async (req, res) => {
         total: animais.length
       });
     } catch (erro) {
+      console.error(erro);
       res.status(500).json({ erro: 'Erro ao buscar animais' });
     }
   });
@@ -54,10 +61,11 @@ admin.get('/animais', async (req, res) => {
       if(!animal){
         return res.status(404).json({erro: 'Animal não encontrado'});
       }
-
-      await animal.update("Dados atualizados com sucesso", dadosAtualizados);
+      
+      await animal.update(dadosAtualizados);
 
       return res.status(200).json({
+        mensagem: 'Animal atualizado com sucesso',
         id: animal.id,
         nome: animal.nome,
         castrado: animal.castrado,

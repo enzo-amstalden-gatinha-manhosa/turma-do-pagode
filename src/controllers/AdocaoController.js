@@ -7,8 +7,8 @@ const postAdocao = async (req, res) => {
   const { tutorId, animalId } = req.body;
 
   // Validação básica - 400 Bad Request
-  if (!tutorId || !animalId || typeof tutorId !== 'number' || typeof animalId !== 'number') {
-    return res.status(400).json({ erro: 'O tutor não respondeu o questionário obrigatório' });
+  if (!tutorId || !animalId) {
+    return res.status(400).json({ erro: 'Campos tutorId e animalId são obrigatórios' });
   }
 
   try {
@@ -29,24 +29,24 @@ const postAdocao = async (req, res) => {
         }
       }
     });
-    
+
     if (pedidoExistente) {
       return res.status(409).json({ erro: 'Este tutor já tem um pedido de adoção para este animal' });
-    } 
-    
+    }
+
     // Cria novo pedido
     const novoPedido = await PedidoAdocao.create({
       tutorId,
       animalId,
       posicao_fila: 1,
-      status: '_em_analise'
+      status: 'em_analise'
     });
 
     return res.status(201).json(novoPedido);
   } catch (erro) {
-    return res.status(500).json({ erro: 'Erro ao registar o pedido de adoção' });
+    console.error(erro);
+    return res.status(500).json({ erro: 'Erro ao registrar o pedido de adoção' });
   }
 };
 
-// Exportando no formato CommonJS
 module.exports = { postAdocao };
