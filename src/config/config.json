@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "TurmaDoPagode1",
+    "database": "postgres",
+    "host": "db.yypmbdzhacvpbeymfcdn.supabase.co",
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "TurmaDoPagode1",
+    "database": "postgres",
+    "host": "db.yypmbdzhacvpbeymfcdn.supabase.co",
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "TurmaDoPagode1",
+    "database": "postgres",
+    "host": "db.yypmbdzhacvpbeymfcdn.supabase.co",
+    "port": 5432,
+    "dialect": "postgres"
+  }
+}
