@@ -1,9 +1,11 @@
-import encrypt from 'encryptjs';
-import { Usuario } from '../models/Usuario';
+const encrypt = require('encryptjs')
+const jwt = require('jsonwebtoken')
+const Usuario = require('../models/Usuario');
 
 const secretKey = "senhalegal"; // idealmente usar variável de ambiente
+const jwtSecret = "segredoJWT"; // também usar variável de ambiente
 
-export const Verification = async (req, res) => {
+const Verification = async (req, res) => {
   const { email, senha } = req.body;
 
   try {
@@ -14,16 +16,37 @@ export const Verification = async (req, res) => {
     }
 
     // Descriptografar a senha armazenada
-    const senhaDescriptografada = encrypt.decrypt(usuario.password, secretKey, 256);
+    const senhaDescriptografada = encrypt.decrypt(usuario.senha, secretKey, 256);
 
-    // Comparar com a senha enviada pelo usuário
     if (senha !== senhaDescriptografada) {
       return res.status(401).json({ message: 'Email ou senha inválidos.' });
     }
 
-    res.status(200).json({ message: 'Login bem-sucedido' });
+    // Gerar token JWT
+    const token = jwt.sign(
+      {
+        id: usuario.id,
+        email: usuario.email,
+        administrador: usuario.administrador
+      },
+      jwtSecret,
+      { expiresIn: '1d' }
+    );
+
+    res.status(200).json({
+      message: 'Login bem-sucedido',
+      token,
+      usuario: {
+        id: usuario.id,
+        nome: usuario.nome_completo,
+        email: usuario.email,
+        administrador: usuario.administrador
+      }
+    });
   } catch (error) {
     console.error('Erro ao fazer login:', error);
     res.status(500).json({ message: 'Erro interno ao tentar fazer login' });
   }
 };
+
+module.exports = { Verification };

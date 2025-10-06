@@ -11,6 +11,7 @@ const adocaoRoutes = require('./src/routes/adocaoRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
 const questionarioRoutes = require('./src/routes/questionarioRoutes');
 const sequelize = require('./src/config/database');
+const loginRoutes = require('./src/routes/loginRoutes')
 
 // Testar conexão com o banco de dados
 sequelize.sync()
@@ -35,9 +36,7 @@ app.get('/perfil', authMiddleware, (req, res) => {
 });
 
 // Rotas administrativas
-app.get('/admin/animais', authMiddleware, adminMiddleware, (req, res) => {
-  res.json({ msg: 'Lista de animais (apenas admins podem ver)' });
-});
+
 
 // Rotas principais
 app.use('/animais', animalRoutes);
@@ -46,6 +45,7 @@ app.use('/usuario', usuarioRoutes);
 app.use('/doacoes', doacoesRoutes);
 app.use('/admin', authMiddleware, adminMiddleware, adminRoutes);
 app.use('/questionario', questionarioRoutes); // Nova rota para questionários
+app.use('/', loginRoutes);
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;

@@ -8,6 +8,6 @@ router.post('/', UsuarioController.criar);
 
 router.patch('/:id', UsuarioController.atualizar);
 
-router.post('/login', UsuarioController.login);
+
 
 module.exports = router;

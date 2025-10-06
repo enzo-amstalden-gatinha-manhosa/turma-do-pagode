@@ -1,7 +1,7 @@
 const express = require('express');
 const sequelize = require('../config/database'); // importa a instância
-const AnimalModel = require('../models/Animal').default; // importa a função do model
-const Animal = AnimalModel(sequelize); // instancia o model de verdade
+const Animal = require('../models/Animal'); // importa a função do model
+
 
 
 

@@ -1,29 +1,33 @@
-import jwt from 'jsonwebtoken';
-import sequelize from '../config/database.js';
-import UsuarioModel from '../models/Usuario.js';
+const jwt = require('jsonwebtoken')
+const  Usuario  = require('../models/Usuario')
 
-const Usuario = UsuarioModel(sequelize);
-const jwtSecret = "senhalegal";
+const jwtSecret = "segredoJWT";
 
 async function authMiddleware(req, res, next) {
-  const authHeader = req.get('Authorization');
-  if (!authHeader) return res.status(401).json({ erro: 'Token não fornecido.' });
-
-  const token = authHeader.split(' ')[1];
-  if (!token) return res.status(401).json({ erro: 'Formato de token inválido.' });
-
   try {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+      return res.status(401).json({ erro: 'Token não fornecido' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ erro: 'Token inválido' });
+    }
+
     const decoded = jwt.verify(token, jwtSecret);
+
     const usuario = await Usuario.findByPk(decoded.id);
-    if (!usuario) return res.status(401).json({ erro: 'Usuário não encontrado.' });
+    if (!usuario) {
+      return res.status(401).json({ erro: 'Usuário não encontrado' });
+    }
 
     req.user = usuario;
     next();
   } catch (err) {
-    console.error('Erro no token:', err);
-    const msg = err.name === 'TokenExpiredError' ? 'Token expirado. Faça login novamente.' : 'Token inválido.';
-    res.status(401).json({ erro: msg });
+    console.error(err);
+    res.status(401).json({ erro: 'Token inválido ou expirado' });
   }
 }
 
-export default authMiddleware;
+module.exports = authMiddleware;

@@ -1,8 +1,7 @@
-const sequelize = require('../config/database');
-const encryptjs = require('encryptjs');
-const jwt = require('jsonwebtoken');
+const sequelize = require('../config/database'); 
 const UsuarioModel = require('../models/Usuario').default; 
-const Usuario = UsuarioModel(sequelize);
+//const Usuario = UsuarioModel(sequelize);
+const Usuario = require('../models/Usuario');
 const encrypt = require('encryptjs');
 const secretKey = "senhalegal";
 
@@ -111,43 +110,6 @@ module.exports = {
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Erro interno ao buscar usuário." });
-    }
-  },
-
-  async login(req, res) {
-    try {
-      const { email, senha } = req.body;
-
-      if (!email || !senha) {
-        return res.status(400).json({ error: "Email e senha são obrigatórios." });
-      }
-
-      const usuario = await Usuario.findOne({ where: { email } });
-
-      if (!usuario) {
-        return res.status(401).json({ error: "Email ou senha inválidos." });
-      }
-
-      const senhaCorreta = encryptjs.decrypt(usuario.senha, secretKey, 256) === senha;
-
-      if (!senhaCorreta) {
-        return res.status(401).json({ error: "Email ou senha inválidos." });
-      }
-
-      const token = jwt.sign({ id: usuario.id, administrador: usuario.administrador }, secretKey, { expiresIn: '1h' });
-
-      res.status(200).json({ message: "Login realizado com sucesso.", token,
-        usuario: {
-          id: usuario.id,
-          nome_completo: usuario.nome_completo,
-          email: usuario.email,
-          administrador: usuario.administrador
-        }
-       });
-
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Erro interno ao realizar login." });
     }
   }
 };

@@ -1,5 +1,5 @@
 const express= require('express');
-const admin= express();
+const admin= express.Router();
 const { op}=require('sequelize');
 const Animal = require('../models/Animal');
 const PedidoAdocao = require('../models/PedidoAdocao');
@@ -8,7 +8,7 @@ const adminMiddleware = require('../middlewares/adminMiddleware');
 admin.use(express.json());
 admin.use('/admin', adminMiddleware);
 
-admin.get('/admin/animais', async (req, res) => {
+admin.get('/animais', async (req, res) => {
     try {
       const { especie, porte, castrado, vacinado, adotado } = req.query;
   
@@ -39,7 +39,7 @@ admin.get('/admin/animais', async (req, res) => {
     }
   });
   
-  admin.patch('/admin/animais/:id', async (req, res)=>{
+  admin.patch('/animais/:id', async (req, res)=>{
     try{
       const {id} = req.params;
       const dadosAtualizados= req.body;
@@ -71,7 +71,7 @@ admin.get('/admin/animais', async (req, res) => {
       return res.status(500).json({erro: 'Erro ao atualizar o animal'});
     };
   })
-  admin.delete('/admin/animais/:id', async (req, res)=>{
+  admin.delete('/animais/:id', async (req, res)=>{
     try{
       const {id} = req.params;
       const animal = await Animal.findByPk(id);

@@ -1,8 +1,5 @@
-const sequelize = require('../config/database'); 
-const QuestionarioModel = require("../models/Questionario").default;
-const Questionario = QuestionarioModel(sequelize);
-const UsuarioModel = require('../models/Usuario').default; 
-const Usuario = UsuarioModel(sequelize);
+const Questionario = require('../models/Questionario')
+const Usuario = require('../models/Usuario');
 
 module.exports = {
   // POST /questionario

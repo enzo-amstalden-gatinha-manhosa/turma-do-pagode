@@ -8,9 +8,9 @@ const adminMiddleware = require('../middlewares/adminMiddleware');
 router.use(authMiddleware);
 
 
-router.use('/admin', adminMiddleware);
+router.use(adminMiddleware);
 
 
-router.use('/admin', adminController);
+router.use('/', adminController);
 
 module.exports = router;
