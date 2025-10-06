@@ -1,3 +1,0 @@
--- database: ./database.sqlite
-
-ALTER TABLE questionarios ADD COLUMN idades_criancas TEXT NULL;
