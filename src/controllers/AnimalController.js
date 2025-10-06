@@ -2,9 +2,6 @@ const express = require('express');
 const sequelize = require('../config/database'); // importa a instância
 const Animal = require('../models/Animal'); // importa a função do model
 
-
-
-
 module.exports = {
   async listar(req, res) {
     try {
@@ -15,7 +12,7 @@ module.exports = {
       if (castrado !== undefined) where.castrado = castrado === 'true';
       if (vacinado !== undefined) where.vacinado = vacinado === 'true';
 
-      const animais = await Animal.findAll({ where, order: [['createdAT', 'ASC']] });
+      const animais = await Animal.findAll({ where, order: [['createdAt', 'ASC']] });
       res.status(200).json({ data: animais, total: animais.length });
     } catch (erro) {
         console.error(erro);
@@ -54,7 +51,7 @@ module.exports = {
         castrado,
         vacinado,
         descricao,
-        foto: Buffer.from(foto, 'base64')
+        foto: foto ? Buffer.from(foto, 'base64') : null //aslalsals
       });
 
       res.status(201).json(novoAnimal);
